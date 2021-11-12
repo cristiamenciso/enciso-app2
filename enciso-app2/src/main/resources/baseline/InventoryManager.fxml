@@ -13,7 +13,7 @@
         <columns>
           <TableColumn fx:id="nameCol" prefWidth="75.0" text="Item Name" />
           <TableColumn fx:id="dollarCol" prefWidth="75.0" text="Dollar Value" />
-            <TableColumn fx:id="SerialCol" prefWidth="75.0" text="Serial Number" />
+            <TableColumn fx:id="serialCol" prefWidth="75.0" text="Serial Number" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -31,7 +31,7 @@
       <Label layoutX="432.0" layoutY="116.0" text="Dollar Amount" />
       <Label layoutX="433.0" layoutY="166.0" text="Serial Number" />
       <Button layoutX="432.0" layoutY="231.0" mnemonicParsing="false" onAction="#addItemButtonClicked" prefHeight="25.0" prefWidth="149.0" text="Add Item" />
-      <Button layoutX="432.0" layoutY="281.0" mnemonicParsing="false" onAction="#RemoveItemButtonClicked" prefHeight="25.0" prefWidth="149.0" text="Remove Item" />
+      <Button layoutX="432.0" layoutY="281.0" mnemonicParsing="false" onAction="#removeItemButtonClicked" prefHeight="25.0" prefWidth="149.0" text="Remove Item" />
       <Button layoutX="432.0" layoutY="327.0" mnemonicParsing="false" onAction="#removeAllButtonClicked" prefHeight="25.0" prefWidth="149.0" text="Remove All" />
       <Button layoutX="432.0" layoutY="391.0" mnemonicParsing="false" onAction="#helpButtonClicked" prefHeight="25.0" prefWidth="149.0" text="Help!" />
    </children>
