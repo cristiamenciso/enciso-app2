@@ -9,16 +9,16 @@ import javafx.collections.ObservableList;
 
 public class InventoryManager {
     // Helper methods to perform work. Makes methods testable
-    private void addToList(InventoryItem item, ObservableList<InventoryItem> list) {
+    public void addToList(InventoryItem item, ObservableList<InventoryItem> list) {
         // add item to observable list
+        list.add(item);
     }
-    private void removeFromList(ObservableList<InventoryItem> list, InventoryItem item) {
+    public void removeFromList(ObservableList<InventoryItem> list, InventoryItem item) {
         // remove item from list
+        list.remove(item);
     }
-    private void removeAllFromList(ObservableList<InventoryItem> list) {
+    public void removeAllFromList(ObservableList<InventoryItem> list) {
         // clear the list
+        list.clear();
     }
-
-
-
 }
