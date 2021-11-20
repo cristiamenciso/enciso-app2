@@ -21,4 +21,22 @@ public class InventoryManager {
         // clear the list
         list.clear();
     }
+    // method to validate name
+    public boolean validateName(String itemName) {
+        if(itemName.length() < 2 || itemName.length() > 256) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    public boolean validatePrice(String dollarAmount) {
+        if(Double.parseDouble(dollarAmount) >= 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
 }

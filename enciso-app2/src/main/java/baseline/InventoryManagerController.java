@@ -15,6 +15,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 
+import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -68,6 +69,7 @@ public class InventoryManagerController implements Initializable {
         table.setItems(masterList);
 
 
+
     }
 
 
@@ -89,16 +91,62 @@ public class InventoryManagerController implements Initializable {
 
     @FXML
     void addItemButtonClicked(ActionEvent event) {
-        // grab input from text fields
-        // initialize Inventory item
-        InventoryItem item = new InventoryItem(nameField.getText(), dollarField.getText(), serialField.getText());
-        // call addToList method
+        statusField.clear();
         InventoryManager man = new InventoryManager();
-        man.addToList(item, masterList);
-        // clear text fields
-        nameField.clear();
-        dollarField.clear();
-        serialField.clear();
+        // grab input from text fields
+        //validate input
+        if(!man.validateName(nameField.getText())) {
+            statusField.clear();
+            statusField.setText("Item name must bet between 2 and 256 characters");
+            nameField.clear();
+        }
+        else if(!man.validatePrice(dollarField.getText())) {
+            statusField.clear();
+            statusField.setText("Dollar amount must be a number greater or equal to 0");
+            dollarField.clear();
+        }
+
+
+        else if(!man.validateName(nameField.getText()) && !man.validatePrice(dollarField.getText())) {
+            statusField.clear();
+            statusField.appendText("\"Item name must bet between 2 and 256 characters\"");
+            String newLine = "\n";
+            statusField.appendText(newLine);
+            statusField.appendText("Dollar amount must be a number greater or equal to 0");
+        }
+        else {
+            // initialize Inventory item
+            InventoryItem item = new InventoryItem(nameField.getText(), dollarField.getText(), serialField.getText());
+            // call addToList method
+            man.addToList(item, masterList);
+            // clear text fields
+            nameField.clear();
+            dollarField.clear();
+            serialField.clear();
+        }
+    }
+
+    // Method to handle when the user tries to edit the name column of the table
+    @FXML
+    void editButtonClicked(ActionEvent event) {
+        InventoryManager man = new InventoryManager();
+        if(man.validateName(nameField.getText())) {
+            selectedItem.setItemName(nameField.getText());
+            nameField.clear();
+        }
+        else {
+            statusField.setText("Item name must bet between 2 and 256 characters");
+            nameField.clear();
+        }
+        if(man.validatePrice(dollarField.getText())) {
+            selectedItem.setDollarAmount(dollarField.getText());
+            nameField.clear();
+        }
+        else {
+            statusField.setText("Dollar amount must be a number greater or equal to 0");
+            dollarField.clear();
+        }
+
     }
 
     @FXML
@@ -125,8 +173,4 @@ public class InventoryManagerController implements Initializable {
         // Display file in new window
 
     }
-
-
-
-
 }

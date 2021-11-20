@@ -17,12 +17,15 @@ public class InventoryItem {
     // getters for the properties
 
     public StringProperty itemNameProperty() {
+
         return itemName;
     }
     public StringProperty dollarProperty() {
+
         return dollarAmount;
     }
     public StringProperty serialProperty() {
+
         return serialNumber;
     }
 
@@ -39,6 +42,7 @@ public class InventoryItem {
     // setters and getters
 
     public String getItemName() {
+
         return itemName.get();
     }
 
@@ -47,18 +51,22 @@ public class InventoryItem {
     }
 
     public String getDollarAmount() {
+
         return dollarAmount.get();
     }
 
     public void setDollarAmount(String dollarAmount) {
+
         this.dollarAmount.set(dollarAmount);
     }
 
     public String getSerialNumber() {
+
         return serialNumber.get();
     }
 
     public void setSerialNumber(String serialNumber) {
+
         this.serialNumber.set(serialNumber);
     }
 }
