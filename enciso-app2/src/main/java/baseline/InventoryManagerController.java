@@ -51,6 +51,8 @@ public class InventoryManagerController implements Initializable {
     // main list that is displayed
     private ObservableList<InventoryItem> masterList = FXCollections.observableArrayList();
 
+
+
     // Initiate inventory item for table selection
     private InventoryItem selectedItem;
 
@@ -100,21 +102,23 @@ public class InventoryManagerController implements Initializable {
             statusField.setText("Item name must bet between 2 and 256 characters");
             nameField.clear();
         }
-        else if(!man.validatePrice(dollarField.getText())) {
+        if(!man.validatePrice(dollarField.getText())) {
             statusField.clear();
             statusField.setText("Dollar amount must be a number greater or equal to 0");
             dollarField.clear();
         }
-
-
-        else if(!man.validateName(nameField.getText()) && !man.validatePrice(dollarField.getText())) {
+        if(!man.validateSerialFormat(serialField.getText())) {
             statusField.clear();
-            statusField.appendText("\"Item name must bet between 2 and 256 characters\"");
-            String newLine = "\n";
-            statusField.appendText(newLine);
-            statusField.appendText("Dollar amount must be a number greater or equal to 0");
+            statusField.setText("Invalid Serial Number Format");
+            serialField.clear();
         }
-        else {
+        if(!man.validateSerialDuplicate(serialField.getText(), masterList)) {
+            statusField.clear();
+            statusField.setText("Serial Number exists");
+            serialField.clear();
+        }
+
+        if(man.validateName(nameField.getText()) && man.validatePrice(dollarField.getText()) && man.validateSerialFormat(serialField.getText()) && man.validateSerialDuplicate(serialField.getText(), masterList)) {
             // initialize Inventory item
             InventoryItem item = new InventoryItem(nameField.getText(), dollarField.getText(), serialField.getText());
             // call addToList method
@@ -129,24 +133,102 @@ public class InventoryManagerController implements Initializable {
     // Method to handle when the user tries to edit the name column of the table
     @FXML
     void editButtonClicked(ActionEvent event) {
+        String dollarSign = "S";
+        statusField.clear();
         InventoryManager man = new InventoryManager();
-        if(man.validateName(nameField.getText())) {
-            selectedItem.setItemName(nameField.getText());
-            nameField.clear();
+        // when only editing the name
+        if(!nameField.getText().isBlank() && dollarField.getText().isBlank() && serialField.getText().isBlank()) {
+            if (man.validateName(nameField.getText())) {
+                selectedItem.setItemName(nameField.getText());
+                nameField.clear();
+            } else {
+                statusField.setText("Item name must bet between 2 and 256 characters");
+                nameField.clear();
+            }
         }
-        else {
-            statusField.setText("Item name must bet between 2 and 256 characters");
-            nameField.clear();
+            // when only editing the dollar amount
+        if(nameField.getText().isBlank() && !dollarField.getText().isBlank() && serialField.getText().isBlank()) {
+            if(man.validatePrice(dollarField.getText())) {
+                selectedItem.setDollarAmount(dollarSign + dollarField.getText());
+                dollarField.clear();
+            }
+            else {
+                statusField.setText("Dollar amount must be a number greater or equal to 0");
+                dollarField.clear();
+            }
         }
-        if(man.validatePrice(dollarField.getText())) {
-            selectedItem.setDollarAmount(dollarField.getText());
-            nameField.clear();
-        }
-        else {
-            statusField.setText("Dollar amount must be a number greater or equal to 0");
-            dollarField.clear();
-        }
+        // editing the serial number
+        if(nameField.getText().isBlank() && dollarField.getText().isBlank() && !serialField.getText().isBlank()) {
+            if(man.validateSerialFormat(serialField.getText()) && man.validateSerialDuplicate(serialField.getText(), masterList)) {
+                selectedItem.setSerialNumber(serialField.getText());
+                serialField.clear();
+            }
+            else {
+                statusField.setText("Invalid Serial Number");
+                serialField.clear();
 
+            }
+        }
+        // editing both name and price
+        if(!nameField.getText().isBlank() && !dollarField.getText().isBlank() && serialField.getText().isBlank()) {
+            if (man.validateName(nameField.getText()) && man.validatePrice(dollarField.getText())) {
+                selectedItem.setItemName(nameField.getText());
+                nameField.clear();
+                selectedItem.setDollarAmount(dollarSign + dollarField.getText());
+                dollarField.clear();
+            }
+            else {
+                statusField.setText("Invalid name and dollar amount");
+                nameField.clear();
+                dollarField.clear();
+            }
+        }
+        // when editing the name and serial number
+        if(!nameField.getText().isBlank() && dollarField.getText().isBlank() && !serialField.getText().isBlank()) {
+            if (man.validateName(nameField.getText()) && man.validateSerialFormat(serialField.getText()) && man.validateSerialDuplicate(serialField.getText(), masterList)) {
+                selectedItem.setItemName(nameField.getText());
+                nameField.clear();
+                selectedItem.setSerialNumber(serialField.getText());
+                serialField.clear();
+            }
+            else {
+                statusField.setText("Invalid name and Serial Number");
+                nameField.clear();
+                serialField.clear();
+            }
+        }
+        // when editing the dollar amount and serialNumber
+        if(nameField.getText().isBlank() && !dollarField.getText().isBlank() && !serialField.getText().isBlank()) {
+            if(man.validatePrice(dollarField.getText()) && man.validateSerialFormat(serialField.getText()) && man.validateSerialDuplicate(serialField.getText(), masterList)) {
+                selectedItem.setDollarAmount(dollarSign + dollarField.getText());
+                dollarField.clear();
+                selectedItem.setSerialNumber(serialField.getText());
+                serialField.clear();
+            }
+            else {
+                statusField.setText("Invalid dollar amount and serial number");
+                dollarField.clear();
+                serialField.clear();
+            }
+        }
+        // when editing all fields
+        if(!nameField.getText().isBlank() && !dollarField.getText().isBlank() && !serialField.getText().isBlank()) {
+            if(man.validateName(nameField.getText()) && man.validatePrice(dollarField.getText()) && man.validateSerialFormat(serialField.getText()) && man.validateSerialDuplicate(serialField.getText(), masterList)) {
+                selectedItem.setItemName(nameField.getText());
+                nameField.clear();
+                selectedItem.setDollarAmount(dollarSign + dollarField.getText());
+                dollarField.clear();
+                selectedItem.setSerialNumber(serialField.getText());
+                serialField.clear();
+            }
+            else {
+                statusField.setText("Invalid item name, dollar amount, and serial number");
+                nameField.clear();
+                dollarField.clear();
+                serialField.clear();
+            }
+
+        }
     }
 
     @FXML
@@ -168,9 +250,4 @@ public class InventoryManagerController implements Initializable {
         man.removeAllFromList(masterList);
     }
 
-    @FXML
-    void helpButtonClicked(ActionEvent event) {
-        // Display file in new window
-
-    }
 }

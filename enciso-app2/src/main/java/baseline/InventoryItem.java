@@ -35,7 +35,9 @@ public class InventoryItem {
     }
     public InventoryItem(String name, String value, String serial) {
         this.itemName = new SimpleStringProperty(name);
-        this.dollarAmount = new SimpleStringProperty(value);
+        String dollarSign = "$";
+        String trueValue = dollarSign + value;
+        this.dollarAmount = new SimpleStringProperty(trueValue);
         this.serialNumber = new SimpleStringProperty(serial);
     }
 
@@ -47,6 +49,7 @@ public class InventoryItem {
     }
 
     public void setItemName(String itemName) {
+
         this.itemName.set(itemName);
     }
 

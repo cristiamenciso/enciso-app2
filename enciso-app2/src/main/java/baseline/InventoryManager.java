@@ -23,6 +23,9 @@ public class InventoryManager {
     }
     // method to validate name
     public boolean validateName(String itemName) {
+        if(itemName.isBlank()) {
+            return true;
+        }
         if(itemName.length() < 2 || itemName.length() > 256) {
             return false;
         }
@@ -38,5 +41,27 @@ public class InventoryManager {
             return false;
         }
 
+    }
+    // method to validate serial number format
+    public boolean validateSerialFormat(String serialNumber) {
+        if(serialNumber.matches("[a-zA-Z]{1}-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}")) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    // method to validate serial to see if its duplicate
+    public boolean validateSerialDuplicate(String serialNumber, ObservableList<InventoryItem> list) {
+        // loop throughout list
+        for(InventoryItem item : list) {
+            if(serialNumber.compareToIgnoreCase(item.getSerialNumber()) == 0) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        return true;
     }
 }
