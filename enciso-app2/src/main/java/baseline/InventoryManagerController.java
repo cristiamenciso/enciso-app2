@@ -123,7 +123,7 @@ public class InventoryManagerController implements Initializable {
         // File file = fileChooser.showOpenDialog(new Stage());
         // use filechooser
         // open file onto table view
-        
+
 
     }
 
@@ -133,36 +133,90 @@ public class InventoryManagerController implements Initializable {
         InventoryManager man = new InventoryManager();
         // grab input from text fields
         //validate input
+
+        // when only the name is invalid
         if(!man.validateName(nameField.getText())) {
             statusField.clear();
             statusField.setText("Item name must bet between 2 and 256 characters");
             nameField.clear();
         }
-        if(!man.validatePrice(dollarField.getText())) {
+        // dollarField invalid
+        else if(!man.validatePrice(dollarField.getText())) {
             statusField.clear();
             statusField.setText("Dollar amount must be a number greater or equal to 0");
             dollarField.clear();
         }
-        if(!man.validateSerialFormat(serialField.getText())) {
+        // name and dollar amount invalid
+        else if(!man.validateName(nameField.getText()) && !man.validatePrice(dollarField.getText())) {
+            statusField.clear();
+            statusField.setText("Invalid name and dollar amount");
+            nameField.clear();
+            dollarField.clear();
+
+        }
+        // name and serialNumber format Invalid
+        else if(!man.validateName(nameField.getText()) && !man.validateSerialFormat(serialField.getText()) ) {
+            statusField.clear();
+            statusField.setText("Invalid name and serial number");
+            nameField.clear();
+            serialField.clear();
+        }
+        // name and serial number duplicate
+        else if(!man.validateName(nameField.getText()) && !man.validateSerialDuplicate(serialField.getText(), masterList)) {
+            statusField.clear();
+            statusField.setText("Name Invalid and Serial is Duplicate");
+            nameField.clear();
+            serialField.clear();
+        }
+        // dollar amount and serial format
+        else if(!man.validatePrice(dollarField.getText()) && !man.validateSerialFormat(serialField.getText())) {
+            statusField.clear();
+            statusField.setText("dollar amount and serial number invalid");
+            dollarField.clear();
+            serialField.clear();
+        }
+        // dollar amount and serial duplicate
+        else if(!man.validatePrice(dollarField.getText()) && !man.validateSerialDuplicate(serialField.getText(), masterList)) {
+            statusField.clear();
+            statusField.setText("Dollar amount invalid and serial duplicate");
+            dollarField.clear();
+            serialField.clear();
+
+        }
+        // serial format invalid
+        else if(!man.validateSerialFormat(serialField.getText())) {
             statusField.clear();
             statusField.setText("Invalid Serial Number Format");
             serialField.clear();
         }
-        if(!man.validateSerialDuplicate(serialField.getText(), masterList)) {
+        // serial number duplicate
+        else if(!man.validateSerialDuplicate(serialField.getText(), masterList)) {
             statusField.clear();
             statusField.setText("Serial Number exists");
             serialField.clear();
         }
-
-        if(man.validateName(nameField.getText()) && man.validatePrice(dollarField.getText()) && man.validateSerialFormat(serialField.getText()) && man.validateSerialDuplicate(serialField.getText(), masterList)) {
-            // initialize Inventory item
-            InventoryItem item = new InventoryItem(nameField.getText(), dollarField.getText(), serialField.getText());
-            // call addToList method
-            man.addToList(item, masterList);
-            // clear text fields
+        // all entries are invalid
+        else if(!man.validateName(nameField.getText()) && !man.validatePrice(dollarField.getText()) && !man.validateSerialFormat(serialField.getText()) && !man.validateSerialDuplicate(serialField.getText(), masterList)) {
+            statusField.clear();
+            statusField.setText("All entries invalid");
             nameField.clear();
             dollarField.clear();
             serialField.clear();
+        }
+
+        else {
+            if (man.validateName(nameField.getText()) && man.validatePrice(dollarField.getText()) && man.validateSerialFormat(serialField.getText())) {
+                man.validateSerialDuplicate(serialField.getText(), masterList);
+
+                // initialize Inventory item
+                InventoryItem item = new InventoryItem(nameField.getText(), dollarField.getText(), serialField.getText());
+                // call addToList method
+                man.addToList(item, masterList);
+                // clear text fields
+                nameField.clear();
+                dollarField.clear();
+                serialField.clear();
+            }
         }
     }
 
