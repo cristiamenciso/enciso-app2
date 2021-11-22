@@ -1,0 +1,63 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class InventoryManagementApplication {
+    main()
+    start()
+}
+
+class InventoryManager {
+    +addToList()
+    +removeFromList()
+    +removeAllFromList()
+    +validateName()
+    +validatePrice()
+    +validateSerialFormat()
+    +validateSerialDuplicate()
+    +loadFile()
+    +saveFile()
+}
+class InventoryManagerController {
+    -ObservableList<InventoryItem> masterList
+    -InventoryItem selectedItem
+    -TableView table
+    -TableColumn dollarCol
+    -TableColumn nameCol
+    -TableColumn serialCol
+    -TextField dollarField
+    -TextField searchField
+    -TextField statusField
+    -removeListButtonClicked()
+    -addItemButtonClicked()
+    -saveButtonClicked()
+    -loadButtonClicked()
+    -removeItemButtonClicked()
+    -editButtonClicked()
+
+
+}
+class InventoryItem {
+    -SimpleStringProperty itemName
+    -SimpleStringProperty dollarAmount
+    -SimpleStringProperty SerialNumber
+    +StringProperty itemNameProperty()
+    +StringProperty dollarProperty()
+    +StringProperty serialProperty()
+    +InventoryItem()
+    +getItemName()
+    +setItemName()
+    +getDollarAmount()
+    +setDollarAmount()
+    +getSerialNumber()
+    +setSerialNumber()
+
+}
+
+javafx.Application <|-- InventoryManagementApplication
+InventoryManagementApplication --- InventoryManagerController
+javafx.Initializable  <---- InventoryManagerController
+InventoryManagerController o--- InventoryManager
+InventoryManagerController o--- InventoryItem
+
+
+@enduml

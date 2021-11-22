@@ -13,10 +13,12 @@ public class InventoryManager {
         // add item to observable list
         list.add(item);
     }
+    // remove selected item off list
     public void removeFromList(ObservableList<InventoryItem> list, InventoryItem item) {
         // remove item from list
         list.remove(item);
     }
+    // remove all items from list
     public void removeAllFromList(ObservableList<InventoryItem> list) {
         // clear the list
         list.clear();
@@ -33,6 +35,7 @@ public class InventoryManager {
             return true;
         }
     }
+    // method to validate price
     public boolean validatePrice(String dollarAmount) {
         if(Double.parseDouble(dollarAmount) >= 0) {
             return true;
@@ -64,4 +67,33 @@ public class InventoryManager {
         }
         return true;
     }
+
+  /*  public void loadFile(File file, ObservableList<InventoryItem> list) throws IOException {
+        List<String> tempList;
+        String dataRow;
+        try (BufferedReader tsvFile = new BufferedReader(new FileReader(file))) {
+            tempList = new ArrayList<>();
+            dataRow = tsvFile.readLine();
+
+            while (dataRow != null) {
+                String[] dataArray = dataRow.split("\t");
+                for (String item : dataArray) {
+                    tempList.add(item);
+                }
+            }
+            Iterator<String> it = tempList.iterator();
+            while (it.hasNext()) {
+                String serialNumber = it.next();
+                String name = it.next();
+                String dollarAmount = it.next();
+                InventoryItem product = new InventoryItem(name, dollarAmount, serialNumber);
+                list.add(product);
+            }
+        }
+
+
+    }
+
+   */
+
 }

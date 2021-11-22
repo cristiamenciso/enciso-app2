@@ -7,6 +7,8 @@ package baseline;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,10 +16,15 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 public class InventoryManagerController implements Initializable {
 
@@ -48,8 +55,11 @@ public class InventoryManagerController implements Initializable {
     @FXML
     private TableColumn<InventoryItem, String> serialCol;
 
+    FileChooser fileChooser = new FileChooser();
+
     // main list that is displayed
     private ObservableList<InventoryItem> masterList = FXCollections.observableArrayList();
+
 
 
 
@@ -67,27 +77,53 @@ public class InventoryManagerController implements Initializable {
         dollarCol.setCellFactory(TextFieldTableCell.forTableColumn());
         serialCol.setCellValueFactory(cellData -> cellData.getValue().serialProperty());
         serialCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        fileChooser.setInitialDirectory(new File("C:\\temp"));
         // set up table
         table.setItems(masterList);
 
+        // filtered list for search
+        FilteredList<InventoryItem> filteredData = new FilteredList<>(masterList, b -> true);
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> filteredData.setPredicate(inventoryItem -> {
+            // no search value
+            if(newValue.isEmpty() || newValue.isBlank() || newValue == null) {
+                return true;
+            }
+            String searchWord = newValue.toLowerCase();
 
+            if(inventoryItem.getItemName().toLowerCase().contains(searchWord)) {
+                return true; // match found
+            }
+            else if(inventoryItem.getSerialNumber().toLowerCase().contains(searchWord)) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }));
 
+        SortedList<InventoryItem> sortedData = new SortedList<>(filteredData);
+
+        // Bind results to table
+        sortedData.comparatorProperty().bind(table.comparatorProperty());
+
+        table.setItems(sortedData);
     }
 
 
-    // Event methods
+    // Incomplete Save and Load Methods
     @FXML
     void saveButtonClicked(ActionEvent event) {
         // open a new window
         // use filechooser
-
     }
 
     @FXML
-    void loadButtonClicked(ActionEvent event) {
+    void loadButtonClicked(ActionEvent event) throws IOException {
         // Open a new window
+        // File file = fileChooser.showOpenDialog(new Stage());
         // use filechooser
         // open file onto table view
+        
 
     }
 

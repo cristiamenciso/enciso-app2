@@ -41,7 +41,7 @@ public class InventoryItem {
         this.serialNumber = new SimpleStringProperty(serial);
     }
 
-    // setters and getters
+    // regular setters and getters
 
     public String getItemName() {
 
